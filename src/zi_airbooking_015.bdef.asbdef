@@ -1,0 +1,86 @@
+managed implementation in class zbp_airbooking_015 unique;
+strict ( 2 );
+with draft;
+
+define behavior for ZI_AIRBOOKING_015 alias Booking
+persistent table zair_booking_015
+draft table zair_book_d_015
+lock master
+total etag LastChangedAt
+authorization master ( instance )
+etag master LocalLastChangedAt
+{
+  create;
+  update;
+  delete;
+  association _Passengers { create; with draft; }
+
+  field ( numbering : managed, readonly ) BookingUuid;
+  field ( readonly ) BookingId, PnrCode, BookingStatus, CreatedAt, CreatedBy, LastChangedAt, LastChangedBy, LocalLastChangedAt;
+
+  action ( features : instance ) ConfirmBooking_015 result [1] $self;
+  action CalculateDynPrice_015 result [1] $self;
+
+  determination SetInitialStatus on modify { create; }
+  validation ValidateFlight_015 on save { field FlightNo, DepDate; create; update; }
+
+  draft action Edit;
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Resume;
+  draft determine action Prepare { validation ValidateFlight_015; }
+
+  // --- ADDED MAPPING TO FIX DISAPPEARING DATA ---
+  mapping for zair_booking_015
+  {
+    BookingUuid = booking_uuid;
+    BookingId = booking_id;
+    PnrCode = pnr_code;
+    FlightNo = flight_no;
+    TravelClass = travel_class;
+    DepDate = dep_date;
+    BasePrice = base_price;
+    FinalPrice = final_price;
+    CurrencyCode = currency_code;
+    BookingStatus = booking_status;
+    CreatedBy = created_by;
+    CreatedAt = created_at;
+    LastChangedBy = last_changed_by;
+    LastChangedAt = last_changed_at;
+    LocalLastChangedAt = local_last_changed_at;
+  }
+}
+
+define behavior for ZI_AIRPAX_015 alias Passenger
+persistent table zair_pax_015
+draft table zair_pax_d_015
+lock dependent by _Booking
+authorization dependent by _Booking
+etag master LocalLastChangedAt
+{
+  update;
+  delete;
+  field ( numbering : managed, readonly ) PaxUuid;
+  field ( readonly ) BookingUuid, LocalLastChangedAt;
+
+  association _Booking { with draft; }
+
+  validation ValidatePassenger_015 on save { field PassportNo, Dob; create; update; }
+
+  // --- ADDED MAPPING TO FIX DISAPPEARING DATA ---
+  mapping for zair_pax_015
+  {
+    PaxUuid = pax_uuid;
+    BookingUuid = booking_uuid;
+    PassengerName = passenger_name;
+    EmailAddress = email_address;
+    PhoneNumber = phone_number;
+    PassportNo = passport_no;
+    Dob = dob;
+    Nationality = nationality;
+    SeatNo = seat_no;
+    LuggageKg = luggage_kg;
+    PaxStatus = pax_status;
+    LocalLastChangedAt = local_last_changed_at;
+  }
+}

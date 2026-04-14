@@ -1,0 +1,5 @@
+@EndUserText.label: 'Service Definition for Airline RSV 015'
+define service ZSD_AIRRSV_015 {
+  expose ZC_AIRBOOKING_015 as Booking;
+  expose ZC_AIRPAX_015     as Passenger;
+}

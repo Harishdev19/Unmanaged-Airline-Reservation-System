@@ -1,0 +1,29 @@
+projection;
+strict ( 2 );
+use draft;
+
+define behavior for ZC_AIRBOOKING_015 alias Booking
+{
+  use create;
+  use update;
+  use delete;
+
+  use action ConfirmBooking_015;
+  use action CalculateDynPrice_015;
+
+  use action Edit;
+  use action Activate;
+  use action Discard;
+  use action Resume;
+  use action Prepare;
+
+  use association _Passengers { create; with draft; }
+}
+
+define behavior for ZC_AIRPAX_015 alias Passenger
+{
+  use update;
+  use delete;
+
+  use association _Booking { with draft; }
+}

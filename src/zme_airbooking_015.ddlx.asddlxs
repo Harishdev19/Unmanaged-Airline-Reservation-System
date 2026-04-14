@@ -1,0 +1,88 @@
+@Metadata.layer: #CORE
+@UI: {
+  headerInfo: { typeName: 'Booking',
+                typeNamePlural: 'Bookings',
+                title: { type: #STANDARD, value: 'BookingId' },
+                description: { type: #STANDARD, value: 'PnrCode' } } }
+annotate view ZC_AIRBOOKING_015 with 
+{
+  @UI.facet: [ 
+    /* Header Facet - Quick Info */
+    { id:              'HeaderPrice',
+      purpose:         #HEADER,
+      type:            #DATAPOINT_REFERENCE,
+      targetQualifier: 'FinalPriceData',
+      position:        10 },
+      
+    /* Main Booking Details Section */
+    { id:              'Booking',
+      purpose:         #STANDARD,
+      type:            #IDENTIFICATION_REFERENCE,
+      label:           'Booking Information',
+      position:        10 },
+      
+    /* Passenger Child Table Section */
+    { id:              'Passengers',
+      purpose:         #STANDARD,
+      type:            #LINEITEM_REFERENCE,
+      label:           'Passenger Management',
+      position:        20,
+      targetElement:   '_Passengers'} 
+  ]
+
+  @UI.hidden: true
+  BookingUuid;
+
+  @EndUserText.label: 'Booking ID'
+  @UI: { lineItem:       [ { position: 10 } ],
+         identification: [ { position: 10 } ],
+         selectionField: [ { position: 10 } ] }
+  BookingId;
+
+  @EndUserText.label: 'PNR Code'
+  @UI: { lineItem:       [ { position: 20 } ],
+         identification: [ { position: 20 } ] }
+  PnrCode;
+
+  @EndUserText.label: 'Flight Number'
+  @UI: { lineItem:       [ { position: 30 } ],
+         identification: [ { position: 30 } ],
+         selectionField: [ { position: 20 } ] }
+  FlightNo;
+
+  @EndUserText.label: 'Travel Class'
+  @UI: { lineItem:       [ { position: 40 } ],
+         identification: [ { position: 40 } ] }
+  TravelClass;
+
+  @EndUserText.label: 'Departure Date'
+  @UI: { lineItem:       [ { position: 50 } ],
+         identification: [ { position: 50 } ],
+         selectionField: [ { position: 30 } ] }
+  DepDate;
+
+  @EndUserText.label: 'Base Fare'
+  @UI: { identification: [ { position: 60 } ] }
+  BasePrice;
+
+  @EndUserText.label: 'Final Price'
+  @UI: { lineItem:       [ { position: 70 },
+                           { type: #FOR_ACTION, dataAction: 'CalculateDynPrice_015', label: 'Simulate Dynamic Price' } ],
+         identification: [ { position: 70 },
+                           { type: #FOR_ACTION, dataAction: 'CalculateDynPrice_015', label: 'Simulate Dynamic Price' } ],
+         dataPoint:      { qualifier: 'FinalPriceData', title: 'Final Price' } }
+  FinalPrice;
+
+  @UI.hidden: true
+  CurrencyCode;
+
+  @EndUserText.label: 'Status (N/C/W/X)'
+  @UI: { lineItem:       [ { position: 80, criticality: 'BookingStatus' },
+                           { type: #FOR_ACTION, dataAction: 'ConfirmBooking_015', label: 'Pay & Confirm Booking' } ],
+         identification: [ { position: 80, criticality: 'BookingStatus' },
+                           { type: #FOR_ACTION, dataAction: 'ConfirmBooking_015', label: 'Pay & Confirm Booking' } ] }
+  BookingStatus;
+  
+  @UI.hidden: true
+  LocalLastChangedAt;
+}

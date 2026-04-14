@@ -1,0 +1,62 @@
+@Metadata.layer: #CORE
+@UI: {
+  headerInfo: { typeName: 'Passenger',
+                typeNamePlural: 'Passengers',
+                title: { type: #STANDARD, value: 'PassengerName' },
+                description: { type: #STANDARD, value: 'PassportNo' } } }
+annotate view ZC_AIRPAX_015 with 
+{
+  @UI.facet: [ 
+    { id:              'PaxDetails',
+      purpose:         #STANDARD,
+      type:            #IDENTIFICATION_REFERENCE,
+      label:           'Passenger Details',
+      position:        10 } 
+  ]
+
+  @UI.hidden: true
+  PaxUuid;
+  
+  @UI.hidden: true
+  BookingUuid;
+
+  @EndUserText.label: 'Full Name'
+  @UI: { lineItem:       [ { position: 10 } ],
+         identification: [ { position: 10 } ] }
+  PassengerName;
+
+  @EndUserText.label: 'Email Address'
+  @UI: { identification: [ { position: 20 } ] }
+  EmailAddress;
+
+  @EndUserText.label: 'Phone Number'
+  @UI: { identification: [ { position: 30 } ] }
+  PhoneNumber;
+
+  @EndUserText.label: 'Passport Number'
+  @UI: { lineItem:       [ { position: 20 } ],
+         identification: [ { position: 40 } ] }
+  PassportNo;
+
+  @EndUserText.label: 'Date of Birth'
+  @UI: { identification: [ { position: 50 } ] }
+  Dob;
+
+  @EndUserText.label: 'Nationality'
+  @UI: { lineItem:       [ { position: 30 } ],
+         identification: [ { position: 60 } ] }
+  Nationality;
+
+  @EndUserText.label: 'Seat No.'
+  @UI: { lineItem:       [ { position: 40 } ],
+         identification: [ { position: 70 } ] }
+  SeatNo;
+  
+  @EndUserText.label: 'Baggage (kg)'
+  @UI: { lineItem:       [ { position: 50 } ],
+         identification: [ { position: 80 } ] }
+  LuggageKg;
+
+  @UI.hidden: true
+  LocalLastChangedAt;
+}
